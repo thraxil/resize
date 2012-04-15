@@ -32,19 +32,24 @@ that will let me port my Apomixis distributed image server
 
 License remains BSD.
 
+Installation
+------------
+
+    $ go get github.com/thraxil/resize
+
 Quick Usage Example
 -------------------
 
-package main
-import (
-	"os"
-	"fmt"
-	"image/jpeg"
-	"log"
-	"github.com/thraxil/resize"
-)
-
-
+    package main
+    import (
+    	"os"
+    	"fmt"
+    	"image/jpeg"
+    	"log"
+    	"github.com/thraxil/resize"
+    )
+    
+    
     func main() {
     	file, err := os.Open("test.jpg")
     	if err != nil {
