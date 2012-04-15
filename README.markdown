@@ -31,3 +31,42 @@ that will let me port my Apomixis distributed image server
 (https://github.com/thraxil/apomixis) from Python/Django to Go.
 
 License remains BSD.
+
+Quick Usage Example
+-------------------
+
+package main
+import (
+	"os"
+	"fmt"
+	"image/jpeg"
+	"log"
+	"github.com/thraxil/resize"
+)
+
+
+    func main() {
+    	file, err := os.Open("test.jpg")
+    	if err != nil {
+        log.Fatal(err)
+    	}
+    	defer file.Close()
+    	
+    	// Decode the image.
+    	m, err := jpeg.Decode(file)
+    	if err != nil {
+    		fmt.Printf("error decoding image\n")
+        log.Fatal(err)
+    	}
+    	bounds := m.Bounds()
+    	outputImage := resize.Resize(m,bounds,100,100)
+    	outBounds := outputImage.Bounds()
+    	fmt.Printf("%q\n",outBounds)
+      fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR,0644) 
+      if err != nil { 
+        fmt.Println("couldn't write", err) 
+        return 
+      } 
+      defer fl.Close() 
+    	jpeg.Encode(fl, outputImage, nil)
+    }
