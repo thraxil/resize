@@ -6,7 +6,6 @@ package resize
 
 import (
 	"image"
-	"image/ycbcr"
 )
 
 // Resize returns a scaled copy of the image slice r of m.
@@ -21,10 +20,6 @@ func Resize(m image.Image, r image.Rectangle, w, h int) image.Image {
 	switch m := m.(type) {
 	case *image.RGBA:
 		return resizeRGBA(m, r, w, h)
-	case *ycbcr.YCbCr:
-		if m, ok := resizeYCbCr(m, r, w, h); ok {
-			return m
-		}
 	}
 	ww, hh := uint64(w), uint64(h)
 	dx, dy := uint64(r.Dx()), uint64(r.Dy())
@@ -112,63 +107,6 @@ func average(sum []uint64, w, h int, n uint64) image.Image {
 	return ret
 }
 
-// resizeYCbCr returns a scaled copy of the YCbCr image slice r of m.
-// The returned image has width w and height h.
-func resizeYCbCr(m *ycbcr.YCbCr, r image.Rectangle, w, h int) (image.Image, bool) {
-	var verticalRes int
-	switch m.SubsampleRatio {
-	case ycbcr.SubsampleRatio420:
-		verticalRes = 2
-	case ycbcr.SubsampleRatio422:
-		verticalRes = 1
-	default:
-		return nil, false
-	}
-	ww, hh := uint64(w), uint64(h)
-	dx, dy := uint64(r.Dx()), uint64(r.Dy())
-	// See comment in Resize.
-	n, sum := dx*dy, make([]uint64, 4*w*h)
-	for y := r.Min.Y; y < r.Max.Y; y++ {
-		Y := m.Y[y*m.YStride:]
-		Cb := m.Cb[y/verticalRes*m.CStride:]
-		Cr := m.Cr[y/verticalRes*m.CStride:]
-		for x := r.Min.X; x < r.Max.X; x++ {
-			// Get the source pixel.
-			r8, g8, b8 := ycbcr.YCbCrToRGB(Y[x], Cb[x/2], Cr[x/2])
-			r64 := uint64(r8)
-			g64 := uint64(g8)
-			b64 := uint64(b8)
-			// Spread the source pixel over 1 or more destination rows.
-			py := uint64(y-r.Min.Y) * hh
-			for remy := hh; remy > 0; {
-				qy := dy - (py % dy)
-				if qy > remy {
-					qy = remy
-				}
-				// Spread the source pixel over 1 or more destination columns.
-				px := uint64(x-r.Min.X) * ww
-				index := 4 * ((py/dy)*ww + (px / dx))
-				for remx := ww; remx > 0; {
-					qx := dx - (px % dx)
-					if qx > remx {
-						qx = remx
-					}
-					qxy := qx * qy
-					sum[index+0] += r64 * qxy
-					sum[index+1] += g64 * qxy
-					sum[index+2] += b64 * qxy
-					sum[index+3] += 0xFFFF * qxy
-					index += 4
-					px += qx
-					remx -= qx
-				}
-				py += qy
-				remy -= qy
-			}
-		}
-	}
-	return average(sum, w, h, n), true
-}
 
 // resizeRGBA returns a scaled copy of the RGBA image slice r of m.
 // The returned image has width w and height h.
