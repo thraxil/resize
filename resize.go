@@ -94,7 +94,7 @@ func Resize(m image.Image, r image.Rectangle, w, h int) image.Image {
 
 // average convert the sums to averages and returns the result.
 func average(sum []uint64, w, h int, n uint64) image.Image {
-	r := image.Rect(0,0,w,h)
+	r := image.Rect(0, 0, w, h)
 	ret := image.NewRGBA(r)
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
@@ -108,7 +108,6 @@ func average(sum []uint64, w, h int, n uint64) image.Image {
 	}
 	return ret
 }
-
 
 // resizeRGBA returns a scaled copy of the RGBA image slice r of m.
 // The returned image has width w and height h.
