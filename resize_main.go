@@ -2,6 +2,7 @@ package main
 
 import (
 	"./resize"
+	"flag"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -25,13 +26,24 @@ func isWide(r image.Rectangle) bool {
 }
 
 func main() {
-	file, err := os.Open("test.jpg")
+	var source string
+	flag.StringVar(&source,"source", "./test.jpg", "image to read")
+	var dest string
+	flag.StringVar(&dest, "dest", "./out.jpg", "image to output")
+	
+	var width, height int
+
+	flag.IntVar(&width, "width", 100, "width to resize to")
+	flag.IntVar(&height, "height", 100, "height to resize to")
+
+  flag.Parse()
+	file, err := os.Open(source)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
-	s := toRect(100, 100)
+	s := toRect(width, height)
 
 	// Decode the image.
 	m, err := jpeg.Decode(file)
@@ -55,7 +67,7 @@ func main() {
 	outputImage := resize.Resize(m, bounds, s.Dx(), s.Dy())
 	outBounds := outputImage.Bounds()
 	fmt.Printf("%q\n", outBounds)
-	fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR, 0644)
+	fl, err := os.OpenFile(dest, os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		fmt.Println("couldn't write", err)
 		return
