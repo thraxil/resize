@@ -25,6 +25,7 @@ func isWide(r image.Rectangle) bool {
 	return r.Dx() > r.Dy()
 }
 
+
 func main() {
 	var source string
 	flag.StringVar(&source,"source", "./test.jpg", "image to read")

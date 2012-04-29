@@ -7,7 +7,91 @@ package resize
 import (
 	"image"
 	"image/color"
+	"regexp"
+	"strconv"
+	"fmt"
 )
+
+type sizeSpec struct {
+	width int
+	height int
+	square bool
+	full bool
+}
+
+// sizes are specified with a short string that can look like
+//   full - full size, will not scale the image
+//   100s - make a 100 pixel square image
+//   200w - will make the image 200 pixels wide, preserving original aspect ratio
+//   100h - will make it 100 pixels high, preserving original aspect ratio
+//   100h300w - will make it 100 pixels high 
+//              and 300 wide (width and height can be specified in either order)
+//
+// images will always be cropped to match the desired aspect ratio rather than 
+// squished, cropping will always be centered.
+//
+// if 'full' or 's' are specified, they will take precedent over
+// width and height specs.
+// 
+// see Test_MakeSizeSpec in resize_test.go for more examples
+
+func MakeSizeSpec(str string) *sizeSpec {
+	s := sizeSpec{}
+	if str == "full" {
+		s.full = true
+		s.width = -1
+		s.height = -1
+		return &s
+	}
+	r,_ := regexp.Compile("\\d+s")
+	if m := r.FindString(str); m != "" {
+		fmt.Println(m[:len(m) - 1])
+		w, _ := strconv.Atoi(m[:len(m) - 1])
+		s.width = w
+		s.height = w
+		s.square = true
+		return &s
+	}
+	// not full size or square, so we need to parse individual dimensions
+	s.square = false
+	s.full = false
+
+	r,_ = regexp.Compile("\\d+w")
+	if m := r.FindString(str); m != "" {
+		w, _ := strconv.Atoi(m[:len(m) - 1])
+		s.width = w
+	} else {
+		// width was not set
+		s.width = -1
+	}
+	r,_ = regexp.Compile("\\d+h")
+	if m := r.FindString(str); m != "" {
+		h, _ := strconv.Atoi(m[:len(m) - 1])
+		s.height = h
+	} else {
+		// height was not set
+		s.height = -1
+	}
+
+	return &s
+}
+
+func (s *sizeSpec) IsSquare() bool {
+	return s.square
+}
+
+func (s *sizeSpec) IsFull() bool {
+	return s.full
+}
+
+func (s *sizeSpec) Width() int {
+	return s.width
+}
+
+func (s *sizeSpec) Height() int {
+	return s.height
+}
+
 
 // Resize returns a scaled copy of the image slice r of m.
 // The returned image has width w and height h.
