@@ -5,11 +5,11 @@
 package resize
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"regexp"
 	"strconv"
-	"fmt"
 )
 
 type sizeSpec struct {
@@ -45,7 +45,6 @@ func MakeSizeSpec(str string) *sizeSpec {
 	}
 	r,_ := regexp.Compile("\\d+s")
 	if m := r.FindString(str); m != "" {
-		fmt.Println(m[:len(m) - 1])
 		w, _ := strconv.Atoi(m[:len(m) - 1])
 		s.width = w
 		s.height = w
@@ -76,26 +75,125 @@ func MakeSizeSpec(str string) *sizeSpec {
 	return &s
 }
 
-func (s *sizeSpec) IsSquare() bool {
-	return s.square
+func (self *sizeSpec) IsSquare() bool {
+	return self.square
 }
 
-func (s *sizeSpec) IsFull() bool {
-	return s.full
+func (self *sizeSpec) IsFull() bool {
+	return self.full
 }
 
-func (s *sizeSpec) Width() int {
-	return s.width
+func (self *sizeSpec) Width() int {
+	return self.width
 }
 
-func (s *sizeSpec) Height() int {
-	return s.height
+func (self *sizeSpec) Height() int {
+	return self.height
 }
 
+// given an image size (as image.Rect), we match it up
+// to the sizeSpec and return a new image.Rect which is 
+// essentially, the dimensions to crop the image to before scaling
+
+func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
+	if self.full || self.Width() == -1 || self.Height() == -1 {
+		// full-size or only scaling one dimension, means we deal with the whole thing
+		return rect
+	}
+
+	if self.square {
+		if rect.Dx() == rect.Dy() {
+			// already square. WIN.
+			return rect
+		}
+		if rect.Dx() > rect.Dy() {
+			// wider than taller, crop and center on width
+			trim := (rect.Dx() - rect.Dy()) / 2
+			return image.Rect(trim, 0, rect.Dx() - trim, rect.Dy())
+		} else {
+			// taller than wider, crop and center on height
+			trim := (rect.Dy() - rect.Dx()) / 2
+			return image.Rect(0, trim, rect.Dx(), rect.Dy() - trim)
+		}
+	}
+	// scaling both width and height
+	if self.Width() > self.Height() {
+		if rect.Dx() == rect.Dy() {
+			// keep width, trim height
+			ratio := float64(self.Height()) / float64(self.Width())
+			targetHeight := int(ratio * float64(rect.Dx()))
+			trim := targetHeight / 2
+			return image.Rect(0, trim, rect.Dx(), rect.Dy() - trim)
+		} else {
+			if rect.Dx() > rect.Dy() {
+
+			} else {
+
+			}
+		}
+	} else {
+		if rect.Dx() == rect.Dy() {
+			// keep height, trim width
+		} else {
+			if rect.Dx() > rect.Dy() {
+
+			} else {
+
+			}
+		}
+
+	}
+	return rect
+}
+
+func min(a, b int) int {
+	if (a < b) { 
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if (a > b) { 
+		return a
+	}
+	return b
+}
+
+// size of the image that will result from resizing one of the
+// specified rect to this sizeSpec
+func (self *sizeSpec) TargetWH(rect image.Rectangle) (int, int) {
+	if self.full {
+		return rect.Dx(), rect.Dy()
+	}
+	if self.square {
+		return self.width,self.height
+	}
+	if self.width == -1 {
+		ratio := float64(rect.Dy()) / float64(self.height)
+		x := int(float64(self.width) * ratio)
+		return x, self.height
+	}
+	if self.height == -1 {
+		ratio := float64(rect.Dx()) / float64(self.width)
+		x := int(float64(self.height) * ratio)
+		return self.width, x
+	}
+
+	return self.width, self.height
+}
 
 // Resize returns a scaled copy of the image slice r of m.
 // The returned image has width w and height h.
-func Resize(m image.Image, r image.Rectangle, w, h int) image.Image {
+func Resize(m image.Image, sizeStr string) image.Image {
+	var w, h int
+
+	ss := MakeSizeSpec(sizeStr)
+	r := ss.ToRect(m.Bounds())
+	w,h = ss.TargetWH(m.Bounds())
+	fmt.Println(w)
+	fmt.Println(h)
+
 	if w < 0 || h < 0 {
 		return nil
 	}
