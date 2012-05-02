@@ -106,8 +106,8 @@ func Test_ToRect(t *testing.T) {
 	square_sized := MakeSizeSpec("100s")
 	width_constrained := MakeSizeSpec("100w")
 	height_constrained := MakeSizeSpec("100h")
-	height_and_width_constrained_wh := MakeSizeSpec("200w100h")
-	height_and_width_constrained_hw := MakeSizeSpec("200h100w")
+	height_and_width_constrained_wh := MakeSizeSpec("100w50h")
+	height_and_width_constrained_hw := MakeSizeSpec("100h50w")
 	wider_than_tall := image.Rect(0,0,1000,500)
 	taller_than_wide := image.Rect(0,0,500,1000)
 	square_image := image.Rect(0,0,1000,1000)
@@ -213,8 +213,8 @@ func Test_ToRect(t *testing.T) {
 		Label: "height and width constrained (w>h) wider than tall",
 		SizeSpec: height_and_width_constrained_wh,
 		Rect: wider_than_tall,
-		ExpectedWidth: 500,
-		ExpectedHeight: 1000,
+		ExpectedWidth: 1000,
+		ExpectedHeight: 500,
 		},
 
 		{
@@ -247,10 +247,10 @@ func Test_ToRect(t *testing.T) {
 		c := cases[i]
 		r := c.SizeSpec.ToRect(c.Rect)
 		if r.Dx() != c.ExpectedWidth {
-			t.Error(c.Label, "-- bad width",r.Dx()," expected",c.ExpectedWidth)
+			t.Error(c.Label, "-- bad width",r.Dx(),"expected",c.ExpectedWidth)
 		}
 		if r.Dy() != c.ExpectedHeight {
-			t.Error(c.Label, "-- bad height",r.Dy()," expected",c.ExpectedHeight)
+			t.Error(c.Label, "-- bad height",r.Dy(),"expected",c.ExpectedHeight)
 		}
 	}
 
