@@ -126,16 +126,21 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			return image.Rect(0, trim, rect.Dx(), rect.Dy() - trim)
 		} else {
 			if rect.Dx() > rect.Dy() {
-
+				
 			} else {
-
+				// rect.Dy() is the keeper
 			}
 		}
 	} else {
 		if rect.Dx() == rect.Dy() {
 			// keep height, trim width
+			ratio := float64(self.Width()) / float64(self.Height())
+			targetWidth := int(ratio * float64(rect.Dy()))
+			trim := targetWidth / 2
+			return image.Rect(trim, 0, rect.Dx() - trim, rect.Dx())
 		} else {
 			if rect.Dx() > rect.Dy() {
+				// rect.Dx() is the keeper
 
 			} else {
 
