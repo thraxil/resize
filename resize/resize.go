@@ -132,6 +132,11 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 				if ratio == outRatio {
 					return rect
 				}
+				if (outRatio > ratio) {
+					// 
+				} else {
+
+				}
 				rHeight := int(float64(rect.Dy()) * ratio)
 				trim := (rect.Dy() - rHeight) / 2
 				return image.Rect(0, trim, rect.Dx(), rect.Dy() - trim)
