@@ -5,91 +5,107 @@ import (
 	"testing"
 )
 
+type sizeSpecTestCase struct {
+	SizeSpecString string
+	Full bool
+	Square bool
+	ExpectedWidth int
+	ExpectedHeight int
+}
+
+
 func Test_MakeSizeSpec(t *testing.T) {
-
-	ss := MakeSizeSpec("100s")
-	if ss.IsFull() {
-		t.Error("thinks it is full-size")
-	}
-	if !ss.IsSquare() { 
-		t.Error("not square") 
-	}
-	if ss.Width() != 100 { 
-		t.Error("not 100 wide") 
-	}
-	if ss.Height() != 100 {
-		t.Error("not 100 high")
-	}
-
-	ss2 := MakeSizeSpec("100w")
-	if ss2.IsFull() {
-		t.Error("thinks it is full-size")
-	}
-	if ss2.IsSquare() { 
-		t.Error("think's it is square") 
-	}
-	if ss2.Width() != 100 { 
-		t.Error("not 100 wide") 
-	}
-	if ss2.Height() != -1 {
-		t.Error("not -1 high")
-	}
-
-	ss3 := MakeSizeSpec("100h")
-	if ss3.IsFull() {
-		t.Error("thinks it is full-size")
-	}
-	if ss3.IsSquare() { 
-		t.Error("think's it is square") 
-	}
-	if ss3.Width() != -1 { 
-		t.Error("not -1 wide") 
-	}
-	if ss3.Height() != 100 {
-		t.Error("not 100 high")
-	}
-
-	ss4 := MakeSizeSpec("100h200w")
-	if ss4.IsFull() {
-		t.Error("thinks it is full-size")
-	}
-	if ss4.IsSquare() { 
-		t.Error("think's it is square") 
-	}
-	if ss4.Width() != 200 { 
-		t.Error("not 200 wide") 
-	}
-	if ss4.Height() != 100 {
-		t.Error("not 100 high")
-	}
-
-	ss5 := MakeSizeSpec("100w200h")
-	if ss5.IsFull() {
-		t.Error("thinks it is full-size")
-	}
-	if ss5.IsSquare() { 
-		t.Error("think's it is square") 
-	}
-	if ss5.Width() != 100 { 
-		t.Error("not 100 wide") 
-	}
-	if ss5.Height() != 200 {
-		t.Error("not 200 high")
+	cases := []sizeSpecTestCase{
+		{
+		SizeSpecString: "100s",
+		Full: false,
+		Square: true,
+		ExpectedWidth: 100,
+		ExpectedHeight: 100,
+		},
+		{
+		SizeSpecString: "100w",
+		Full: false,
+		Square: false,
+		ExpectedWidth: 100,
+		ExpectedHeight: -1,
+		},
+		{
+		SizeSpecString: "100h",
+		Full: false,
+		Square: false,
+		ExpectedWidth: -1,
+		ExpectedHeight: 100,
+		},
+		{
+		SizeSpecString: "100h200w",
+		Full: false,
+		Square: false,
+		ExpectedWidth: 200,
+		ExpectedHeight: 100,
+		},
+		{
+		SizeSpecString: "200w100h",
+		Full: false,
+		Square: false,
+		ExpectedWidth: 200,
+		ExpectedHeight: 100,
+		},
+		{
+		SizeSpecString: "100w200h",
+		Full: false,
+		Square: false,
+		ExpectedWidth: 100,
+		ExpectedHeight: 200,
+		},
+		{
+		SizeSpecString: "200h100w",
+		Full: false,
+		Square: false,
+		ExpectedWidth: 100,
+		ExpectedHeight: 200,
+		},
+		{
+		SizeSpecString: "full",
+		Full: true,
+		Square: false,
+		ExpectedWidth: -1,
+		ExpectedHeight: -1,
+		},
 	}
 
-	ss6 := MakeSizeSpec("full")
-	if !ss6.IsFull() {
-		t.Error("not full-size")
+	for i := range cases {
+		c := cases[i]
+		ss := MakeSizeSpec(c.SizeSpecString)
+		if c.Full {
+			if !ss.IsFull() {
+				t.Error(c.SizeSpecString, "-- should be full-size but is not")
+			} 
+		} else {
+			if ss.IsFull() {
+				t.Error(c.SizeSpecString, "-- should not be full-size but is")
+			}
+		}
+
+		if c.Square {
+			if !ss.IsSquare() {
+				t.Error(c.SizeSpecString, "-- should be square but is not")
+			} 
+		} else {
+			if ss.IsSquare() {
+				t.Error(c.SizeSpecString, "-- should not be square but is")
+			}
+		}
+
+		if ss.Width() != c.ExpectedWidth {
+			t.Error(c.SizeSpecString, "-- bad width", ss.Width(), "expected", c.ExpectedWidth)
+		}
+		if ss.Height() != c.ExpectedHeight {
+			t.Error(c.SizeSpecString, "-- bad height", ss.Height(), "expected", c.ExpectedHeight)
+		}
 	}
-	if ss6.IsSquare() { 
-		t.Error("not square") 
-	}
-	if ss6.Width() != -1 { 
-		t.Error("width set on full") 
-	}
-	if ss6.Height() != -1 {
-		t.Error("height set on full")
-	}
+
+
 
 }
 
