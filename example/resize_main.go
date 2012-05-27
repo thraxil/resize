@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./resize"
+	"github.com/thraxil/resize"
 	"flag"
 	"fmt"
 	"image/jpeg"
