@@ -127,7 +127,6 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			if rect.Dx() > rect.Dy() {
 				ratio := float64(rect.Dy()) / float64(rect.Dx())
 				outRatio := float64(self.Height()) / float64(self.Width())
-				fmt.Println(ratio, outRatio)
 				if ratio == outRatio {
 					return rect
 				}
@@ -195,12 +194,12 @@ func (self *sizeSpec) TargetWH(rect image.Rectangle) (int, int) {
 	}
 	if self.width == -1 {
 		ratio := float64(rect.Dy()) / float64(self.height)
-		x := int(float64(self.width) * ratio)
+		x := int(float64(rect.Dx()) / ratio)
 		return x, self.height
 	}
 	if self.height == -1 {
 		ratio := float64(rect.Dx()) / float64(self.width)
-		x := int(float64(self.height) * ratio)
+		x := int(float64(rect.Dy()) / ratio)
 		return self.width, x
 	}
 
@@ -215,8 +214,6 @@ func Resize(m image.Image, sizeStr string) image.Image {
 	ss := MakeSizeSpec(sizeStr)
 	r := ss.ToRect(m.Bounds())
 	w, h = ss.TargetWH(m.Bounds())
-	fmt.Println(w)
-	fmt.Println(h)
 
 	if w < 0 || h < 0 {
 		return nil
@@ -225,7 +222,6 @@ func Resize(m image.Image, sizeStr string) image.Image {
 		return image.NewRGBA64(r)
 	}
 
-	fmt.Println("using the newest one")
 	dst := image.NewRGBA(image.Rect(0, 0, w, h))
 	if err := graphics.Thumbnail(dst, m); err != nil {
 		fmt.Println("could not thumbnail")
