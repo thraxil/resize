@@ -100,17 +100,16 @@ func (self sizeSpec) Height() int {
 func (self sizeSpec) MaxDimension() int {
 	if self.width > self.height {
 		return self.width
-	} 
+	}
 	return self.height
 }
 
 func (self sizeSpec) MinDimension() int {
 	if self.width < self.height {
 		return self.width
-	} 
+	}
 	return self.height
 }
-
 
 func rectMaxDimension(r image.Rectangle) int {
 	if r.Dx() > r.Dy() {
@@ -147,7 +146,7 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 		// full-size or only scaling one dimension, means we deal with the whole thing
 		return rect
 	}
-	
+
 	if self.square {
 		if rectIsSquare(rect) {
 			// already square. WIN.
@@ -212,7 +211,7 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			return image.Rect(trim, 0, rect.Dx()-trim, rect.Dx())
 		} else {
 			if rectIsLandscape(rect) {
-				ratio := float64(self.Width()) / float64(self.Height()) // 50 / 100
+				ratio := float64(self.Width()) / float64(self.Height())
 				targetWidth := int(ratio * float64(rect.Dy()))
 				trim := (rect.Dx() - targetWidth) / 2
 				return image.Rect(trim, 0, rect.Dx()-trim, rect.Dy())
@@ -253,11 +252,13 @@ func (self *sizeSpec) TargetWH(rect image.Rectangle) (int, int) {
 		return self.width, self.height
 	}
 	if self.width == -1 {
+		// scaling height only
 		ratio := float64(rect.Dy()) / float64(self.height)
 		x := int(float64(rect.Dx()) / ratio)
 		return x, self.height
 	}
 	if self.height == -1 {
+		// scaling height only
 		ratio := float64(rect.Dx()) / float64(self.width)
 		x := int(float64(rect.Dy()) / ratio)
 		return self.width, x
