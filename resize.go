@@ -151,9 +151,7 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 	if self.square {
 		if rectIsSquare(rect) {
 			// already square. WIN.
-			// just make sure it's the size we want. 
-			// a request for a square should scale *up* if necessary
-			return image.Rect(0, 0, self.width, self.height)
+			return rect
 		}
 		if rectIsLandscape(rect) {
 			// crop and center on width
@@ -165,6 +163,13 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			trim := (rect.Dy() - rect.Dx()) / 2
 			return image.Rect(0, trim, rect.Dx(), rect.Dy()-trim)
 		}
+	}
+	if self.width == self.height {
+		// "square" but not square.
+		// fit it in a box with a max dimension, but don't crop
+		// or scale up
+		// in other words, return the whole thing. TargetWH will have to deal.
+		return rect
 	}
 	// scaling both width and height
 	if self.IsLandscape() {
@@ -212,7 +217,10 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 				trim := targetWidth / 2
 				return image.Rect(trim, 0, rect.Dx()-trim, rect.Dx())
 			} else {
-
+				// rect.Dy() is the keeper
+//				ratio := float64(rect.Dx()) / float64(self.Width())
+//				rHeight := ratio * float64(self.Height())
+				
 			}
 		}
 

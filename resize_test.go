@@ -125,9 +125,6 @@ func Test_ToRect(t *testing.T) {
 	box_constrained := MakeSizeSpec("100w100h")
 	height_and_width_constrained_wh := MakeSizeSpec("100w50h")
 	height_and_width_constrained_hw := MakeSizeSpec("100h50w")
-	extra_large_square := MakeSizeSpec("2000s")
-	extra_large_width_constrained := MakeSizeSpec("2000w")
-	extra_large_height_constrained := MakeSizeSpec("2000h")
 	landscape := image.Rect(0,0,1000,500)
 	portrait := image.Rect(0,0,500,1000)
 	square_image := image.Rect(0,0,1000,1000)
@@ -142,75 +139,35 @@ func Test_ToRect(t *testing.T) {
 		},
 
 		{
-		Label: "do expand beyond original (square/square)",
-		SizeSpec: extra_large_square,
-		Rect: square_image,
-		ExpectedWidth: 2000,
-		ExpectedHeight: 2000,
-		},
-
-		{
-		Label: "do not expand beyond original (w/square)",
-		SizeSpec: extra_large_width_constrained,
-		Rect: square_image,
-		ExpectedWidth: square_image.Dx(),
-		ExpectedHeight: square_image.Dy(),
-		},
-
-		{
-		Label: "do not expand beyond original (h/square)",
-		SizeSpec: extra_large_height_constrained,
-		Rect: square_image,
-		ExpectedWidth: square_image.Dx(),
-		ExpectedHeight: square_image.Dy(),
-		},
-
-		{
-		Label: "do expand square beyond original (square/w)",
-		SizeSpec: extra_large_square,
-		Rect: landscape,
-		ExpectedWidth: 2000,
-		ExpectedHeight: 2000,
-		},
-
-		{
-		Label: "do expand square beyond original (square/h)",
-		SizeSpec: extra_large_square,
-		Rect: portrait,
-		ExpectedWidth: 2000,
-		ExpectedHeight: 2000,
-		},
-
-		{
 		Label: "box constraint on square (eq/sq)",
 		SizeSpec: box_constrained,
 		Rect: square_image,
-		ExpectedWidth: box_constrained.width,
-		ExpectedHeight: box_constrained.height,
+		ExpectedWidth: square_image.Dx(),
+		ExpectedHeight: square_image.Dy(),
 		},
 
 		{
 		Label: "box constraint on portrait (eq/port)",
 		SizeSpec: box_constrained,
 		Rect: portrait,
-		ExpectedWidth: 50,
-		ExpectedHeight: 100,
+		ExpectedWidth: portrait.Dx(),
+		ExpectedHeight: portrait.Dy(),
 		},
 
 		{
 		Label: "box constraint on landscape (eq/landscape)",
 		SizeSpec: box_constrained,
 		Rect: landscape,
-		ExpectedWidth: 100,
-		ExpectedHeight: 50,
+		ExpectedWidth: landscape.Dx(),
+		ExpectedHeight: landscape.Dy(),
 		},
 
 		{
 		Label: "square == square",
 		SizeSpec: square_sized,
 		Rect: square_image,
-		ExpectedWidth: square_sized.width,
-		ExpectedHeight: square_sized.height,
+		ExpectedWidth: square_image.Dx(),
+		ExpectedHeight: square_image.Dy(),
 		},
 
 		{
