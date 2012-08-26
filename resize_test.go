@@ -122,6 +122,7 @@ func Test_ToRect(t *testing.T) {
 	square_sized := MakeSizeSpec("100s")
 	width_constrained := MakeSizeSpec("100w")
 	height_constrained := MakeSizeSpec("100h")
+	box_constrained := MakeSizeSpec("100w100h")
 	height_and_width_constrained_wh := MakeSizeSpec("100w50h")
 	height_and_width_constrained_hw := MakeSizeSpec("100h50w")
 	extra_large_square := MakeSizeSpec("2000s")
@@ -180,13 +181,36 @@ func Test_ToRect(t *testing.T) {
 		ExpectedHeight: 2000,
 		},
 
+		{
+		Label: "box constraint on square (eq/sq)",
+		SizeSpec: box_constrained,
+		Rect: square_image,
+		ExpectedWidth: box_constrained.width,
+		ExpectedHeight: box_constrained.height,
+		},
+
+		{
+		Label: "box constraint on portrait (eq/port)",
+		SizeSpec: box_constrained,
+		Rect: portrait,
+		ExpectedWidth: 50,
+		ExpectedHeight: 100,
+		},
+
+		{
+		Label: "box constraint on landscape (eq/landscape)",
+		SizeSpec: box_constrained,
+		Rect: landscape,
+		ExpectedWidth: 100,
+		ExpectedHeight: 50,
+		},
 
 		{
 		Label: "square == square",
 		SizeSpec: square_sized,
 		Rect: square_image,
-		ExpectedWidth: square_image.Dx(),
-		ExpectedHeight: square_image.Dy(),
+		ExpectedWidth: square_sized.width,
+		ExpectedHeight: square_sized.height,
 		},
 
 		{

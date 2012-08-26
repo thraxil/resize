@@ -155,26 +155,27 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			// a request for a square should scale *up* if necessary
 			return image.Rect(0, 0, self.width, self.height)
 		}
-		if rect.Dx() > rect.Dy() {
-			// wider than taller, crop and center on width
+		if rectIsLandscape(rect) {
+			// crop and center on width
 			trim := (rect.Dx() - rect.Dy()) / 2
 			return image.Rect(trim, 0, rect.Dx()-trim, rect.Dy())
 		} else {
-			// taller than wider, crop and center on height
+			// portrait
+			// crop and center on height
 			trim := (rect.Dy() - rect.Dx()) / 2
 			return image.Rect(0, trim, rect.Dx(), rect.Dy()-trim)
 		}
 	}
 	// scaling both width and height
-	if self.Width() > self.Height() {
-		if rect.Dx() == rect.Dy() {
+	if self.IsLandscape() {
+		if rectIsSquare(rect) {
 			// keep width, trim height
 			ratio := float64(self.Height()) / float64(self.Width())
 			targetHeight := int(ratio * float64(rect.Dx()))
 			trim := targetHeight / 2
 			return image.Rect(0, trim, rect.Dx(), rect.Dy()-trim)
 		} else {
-			if rect.Dx() > rect.Dy() {
+			if rectIsLandscape(rect) {
 				ratio := float64(rect.Dy()) / float64(rect.Dx())
 				outRatio := float64(self.Height()) / float64(self.Width())
 				if ratio == outRatio {
@@ -197,14 +198,14 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			}
 		}
 	} else {
-		if rect.Dx() == rect.Dy() {
+		if rectIsSquare(rect) {
 			// keep height, trim width
 			ratio := float64(self.Width()) / float64(self.Height())
 			targetWidth := int(ratio * float64(rect.Dy()))
 			trim := targetWidth / 2
 			return image.Rect(trim, 0, rect.Dx()-trim, rect.Dx())
 		} else {
-			if rect.Dx() > rect.Dy() {
+			if rectIsLandscape(rect) {
 				// rect.Dx() is the keeper
 				ratio := float64(self.Width()) / float64(self.Height())
 				targetWidth := int(ratio * float64(rect.Dy()))
