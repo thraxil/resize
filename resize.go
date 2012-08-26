@@ -77,6 +77,14 @@ func (self sizeSpec) IsSquare() bool {
 	return self.square
 }
 
+func (self sizeSpec) IsPortrait() bool {
+	return self.height > self.width
+}
+
+func (self sizeSpec) IsLandscape() bool {
+	return self.width > self.height
+}
+
 func (self sizeSpec) IsFull() bool {
 	return self.full
 }
@@ -118,6 +126,18 @@ func rectMinDimension(r image.Rectangle) int {
 	return r.Dy()
 }
 
+func rectIsPortrait(r image.Rectangle) bool {
+	return r.Dy() > r.Dx()
+}
+
+func rectIsLandscape(r image.Rectangle) bool {
+	return r.Dx() > r.Dy()
+}
+
+func rectIsSquare(r image.Rectangle) bool {
+	return r.Dx() == r.Dy()
+}
+
 // given an image size (as image.Rect), we match it up
 // to the sizeSpec and return a new image.Rect which is 
 // essentially, the dimensions to crop the image to before scaling
@@ -129,9 +149,11 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 	}
 	
 	if self.square {
-		if rect.Dx() == rect.Dy() {
+		if rectIsSquare(rect) {
 			// already square. WIN.
-			return rect
+			// just make sure it's the size we want. 
+			// a request for a square should scale *up* if necessary
+			return image.Rect(0, 0, self.width, self.height)
 		}
 		if rect.Dx() > rect.Dy() {
 			// wider than taller, crop and center on width

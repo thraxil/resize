@@ -141,11 +141,11 @@ func Test_ToRect(t *testing.T) {
 		},
 
 		{
-		Label: "do not expand beyond original (square/square)",
+		Label: "do expand beyond original (square/square)",
 		SizeSpec: extra_large_square,
 		Rect: square_image,
-		ExpectedWidth: square_image.Dx(),
-		ExpectedHeight: square_image.Dy(),
+		ExpectedWidth: 2000,
+		ExpectedHeight: 2000,
 		},
 
 		{
@@ -163,20 +163,21 @@ func Test_ToRect(t *testing.T) {
 		ExpectedWidth: square_image.Dx(),
 		ExpectedHeight: square_image.Dy(),
 		},
+
 		{
-		Label: "do not expand beyond original (square/w)",
+		Label: "do expand square beyond original (square/w)",
 		SizeSpec: extra_large_square,
 		Rect: landscape,
-		ExpectedWidth: landscape.Dx(),
-		ExpectedHeight: landscape.Dy(),
+		ExpectedWidth: 2000,
+		ExpectedHeight: 2000,
 		},
 
 		{
-		Label: "do not expand beyond original (square_h)",
+		Label: "do expand square beyond original (square/h)",
 		SizeSpec: extra_large_square,
 		Rect: portrait,
-		ExpectedWidth: portrait.Dx(),
-		ExpectedHeight: portrait.Dy(),
+		ExpectedWidth: 2000,
+		ExpectedHeight: 2000,
 		},
 
 
