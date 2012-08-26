@@ -187,9 +187,9 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 					return rect
 				}
 				if outRatio > ratio {
-					// 
+					// want it even wider, so crop height
 				} else {
-
+					// narrower, so crop on width
 				}
 				rHeight := int(float64(rect.Dy()) * ratio)
 				trim := (rect.Dy() - rHeight) / 2
@@ -203,24 +203,25 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 			}
 		}
 	} else {
+		// portrait constraint
 		if rectIsSquare(rect) {
 			// keep height, trim width
 			ratio := float64(self.Width()) / float64(self.Height())
 			targetWidth := int(ratio * float64(rect.Dy()))
-			trim := targetWidth / 2
+			trim := (rect.Dx() - targetWidth) / 2
 			return image.Rect(trim, 0, rect.Dx()-trim, rect.Dx())
 		} else {
 			if rectIsLandscape(rect) {
-				// rect.Dx() is the keeper
-				ratio := float64(self.Width()) / float64(self.Height())
+				ratio := float64(self.Width()) / float64(self.Height()) // 50 / 100
 				targetWidth := int(ratio * float64(rect.Dy()))
-				trim := targetWidth / 2
-				return image.Rect(trim, 0, rect.Dx()-trim, rect.Dx())
+				trim := (rect.Dx() - targetWidth) / 2
+				return image.Rect(trim, 0, rect.Dx()-trim, rect.Dy())
 			} else {
-				// rect.Dy() is the keeper
-//				ratio := float64(rect.Dx()) / float64(self.Width())
-//				rHeight := ratio * float64(self.Height())
-				
+				//rect.Dy() is the keeper
+				ratio := float64(rect.Dx()) / float64(self.Width())
+				rHeight := ratio * float64(self.Height())
+				trim := int((float64(rect.Dy()) - rHeight) / 2)
+				return image.Rect(0, trim, rect.Dx(), rect.Dy()-trim)
 			}
 		}
 

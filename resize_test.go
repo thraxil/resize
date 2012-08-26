@@ -123,8 +123,8 @@ func Test_ToRect(t *testing.T) {
 	width_constrained := MakeSizeSpec("100w")
 	height_constrained := MakeSizeSpec("100h")
 	box_constrained := MakeSizeSpec("100w100h")
-	height_and_width_constrained_wh := MakeSizeSpec("100w50h")
-	height_and_width_constrained_hw := MakeSizeSpec("100h50w")
+	height_and_width_constrained_landscape := MakeSizeSpec("100w50h")
+	height_and_width_constrained_portrait := MakeSizeSpec("100h50w")
 	landscape := image.Rect(0,0,1000,500)
 	portrait := image.Rect(0,0,500,1000)
 	square_image := image.Rect(0,0,1000,1000)
@@ -235,51 +235,51 @@ func Test_ToRect(t *testing.T) {
 		},
 
 		{
-		Label: "height and width constrained (w>h) square",
-		SizeSpec: height_and_width_constrained_wh,
+		Label: "height and width constrained (landscape) square",
+		SizeSpec: height_and_width_constrained_landscape,
 		Rect: square_image,
 		ExpectedWidth: 1000,
 		ExpectedHeight: 500,
 		},
 
 		{
-		Label: "height and width constrained (w>h) taller than wide",
-		SizeSpec: height_and_width_constrained_wh,
+		Label: "height and width constrained (landscape) portrait",
+		SizeSpec: height_and_width_constrained_landscape,
 		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 250,
 		},
 
 		{
-		Label: "height and width constrained (w>h) wider than tall",
-		SizeSpec: height_and_width_constrained_wh,
+		Label: "height and width constrained (landscape) portrait",
+		SizeSpec: height_and_width_constrained_landscape,
 		Rect: landscape,
 		ExpectedWidth: 1000,
 		ExpectedHeight: 500,
 		},
 
 		{
-		Label: "height and width constrained (h>w) square",
-		SizeSpec: height_and_width_constrained_hw,
+		Label: "height and width constrained (portrait) square",
+		SizeSpec: height_and_width_constrained_portrait,
 		Rect: square_image,
 		ExpectedWidth: 500,
 		ExpectedHeight: 1000,
 		},
 
 		{
-		Label: "height and width constrained (h>w) taller than wide",
-		SizeSpec: height_and_width_constrained_hw,
+		Label: "height and width constrained (portrait) portrait",
+		SizeSpec: height_and_width_constrained_portrait,
 		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 1000,
 		},
 
 		{
-		Label: "height and width constrained (h>w) wider than tall",
-		SizeSpec: height_and_width_constrained_hw,
+		Label: "height and width constrained (portrait) landscape",
+		SizeSpec: height_and_width_constrained_portrait,
 		Rect: landscape,
-		ExpectedWidth: 500,
-		ExpectedHeight: 1000,
+		ExpectedWidth: 250,
+		ExpectedHeight: 500,
 		},
 
 	}
