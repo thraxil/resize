@@ -124,6 +124,9 @@ func Test_ToRect(t *testing.T) {
 	height_constrained := MakeSizeSpec("100h")
 	height_and_width_constrained_wh := MakeSizeSpec("100w50h")
 	height_and_width_constrained_hw := MakeSizeSpec("100h50w")
+	extra_large_square := MakeSizeSpec("2000s")
+	extra_large_width_constrained := MakeSizeSpec("2000w")
+	extra_large_height_constrained := MakeSizeSpec("2000h")
 	wider_than_tall := image.Rect(0,0,1000,500)
 	taller_than_wide := image.Rect(0,0,500,1000)
 	square_image := image.Rect(0,0,1000,1000)
@@ -136,6 +139,46 @@ func Test_ToRect(t *testing.T) {
 		ExpectedWidth: square_image.Dx(),
 		ExpectedHeight: square_image.Dy(),
 		},
+
+		{
+		Label: "do not expand beyond original (square/square)",
+		SizeSpec: extra_large_square,
+		Rect: square_image,
+		ExpectedWidth: square_image.Dx(),
+		ExpectedHeight: square_image.Dy(),
+		},
+
+		{
+		Label: "do not expand beyond original (w/square)",
+		SizeSpec: extra_large_width_constrained,
+		Rect: square_image,
+		ExpectedWidth: square_image.Dx(),
+		ExpectedHeight: square_image.Dy(),
+		},
+
+		{
+		Label: "do not expand beyond original (h/square)",
+		SizeSpec: extra_large_height_constrained,
+		Rect: square_image,
+		ExpectedWidth: square_image.Dx(),
+		ExpectedHeight: square_image.Dy(),
+		},
+		{
+		Label: "do not expand beyond original (square/w)",
+		SizeSpec: extra_large_square,
+		Rect: wider_than_tall,
+		ExpectedWidth: wider_than_tall.Dx(),
+		ExpectedHeight: wider_than_tall.Dy(),
+		},
+
+		{
+		Label: "do not expand beyond original (square_h)",
+		SizeSpec: extra_large_square,
+		Rect: taller_than_wide,
+		ExpectedWidth: taller_than_wide.Dx(),
+		ExpectedHeight: taller_than_wide.Dy(),
+		},
+
 
 		{
 		Label: "square == square",

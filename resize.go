@@ -73,20 +73,49 @@ func MakeSizeSpec(str string) *sizeSpec {
 	return &s
 }
 
-func (self *sizeSpec) IsSquare() bool {
+func (self sizeSpec) IsSquare() bool {
 	return self.square
 }
 
-func (self *sizeSpec) IsFull() bool {
+func (self sizeSpec) IsFull() bool {
 	return self.full
 }
 
-func (self *sizeSpec) Width() int {
+func (self sizeSpec) Width() int {
 	return self.width
 }
 
-func (self *sizeSpec) Height() int {
+func (self sizeSpec) Height() int {
 	return self.height
+}
+
+func (self sizeSpec) MaxDimension() int {
+	if self.width > self.height {
+		return self.width
+	} 
+	return self.height
+}
+
+func (self sizeSpec) MinDimension() int {
+	if self.width < self.height {
+		return self.width
+	} 
+	return self.height
+}
+
+
+func rectMaxDimension(r image.Rectangle) int {
+	if r.Dx() > r.Dy() {
+		return r.Dx()
+	}
+	return r.Dy()
+}
+
+func rectMinDimension(r image.Rectangle) int {
+	if r.Dx() < r.Dy() {
+		return r.Dx()
+	}
+	return r.Dy()
 }
 
 // given an image size (as image.Rect), we match it up
@@ -98,7 +127,7 @@ func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 		// full-size or only scaling one dimension, means we deal with the whole thing
 		return rect
 	}
-
+	
 	if self.square {
 		if rect.Dx() == rect.Dy() {
 			// already square. WIN.
