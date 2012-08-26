@@ -127,8 +127,8 @@ func Test_ToRect(t *testing.T) {
 	extra_large_square := MakeSizeSpec("2000s")
 	extra_large_width_constrained := MakeSizeSpec("2000w")
 	extra_large_height_constrained := MakeSizeSpec("2000h")
-	wider_than_tall := image.Rect(0,0,1000,500)
-	taller_than_wide := image.Rect(0,0,500,1000)
+	landscape := image.Rect(0,0,1000,500)
+	portrait := image.Rect(0,0,500,1000)
 	square_image := image.Rect(0,0,1000,1000)
 
 	cases := []toRectTestCase{
@@ -166,17 +166,17 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "do not expand beyond original (square/w)",
 		SizeSpec: extra_large_square,
-		Rect: wider_than_tall,
-		ExpectedWidth: wider_than_tall.Dx(),
-		ExpectedHeight: wider_than_tall.Dy(),
+		Rect: landscape,
+		ExpectedWidth: landscape.Dx(),
+		ExpectedHeight: landscape.Dy(),
 		},
 
 		{
 		Label: "do not expand beyond original (square_h)",
 		SizeSpec: extra_large_square,
-		Rect: taller_than_wide,
-		ExpectedWidth: taller_than_wide.Dx(),
-		ExpectedHeight: taller_than_wide.Dy(),
+		Rect: portrait,
+		ExpectedWidth: portrait.Dx(),
+		ExpectedHeight: portrait.Dy(),
 		},
 
 
@@ -191,7 +191,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "square != square (wider than taller)",
 		SizeSpec: square_sized,
-		Rect: wider_than_tall,
+		Rect: landscape,
 		ExpectedWidth: 500,
 		ExpectedHeight: 500,
 		},
@@ -199,7 +199,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "square != square (taller than wide)",
 		SizeSpec: square_sized,
-		Rect: taller_than_wide,
+		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 500,
 		},
@@ -215,7 +215,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "width constrained wider than tall",
 		SizeSpec: width_constrained,
-		Rect: wider_than_tall,
+		Rect: landscape,
 		ExpectedWidth: 1000,
 		ExpectedHeight: 500,
 		},
@@ -223,7 +223,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "width constrained taller than wide",
 		SizeSpec: width_constrained,
-		Rect: taller_than_wide,
+		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 1000,
 		},
@@ -239,7 +239,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "height constrained wider than tall",
 		SizeSpec: height_constrained,
-		Rect: wider_than_tall,
+		Rect: landscape,
 		ExpectedWidth: 1000,
 		ExpectedHeight: 500,
 		},
@@ -247,7 +247,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "height constrained taller than wide",
 		SizeSpec: height_constrained,
-		Rect: taller_than_wide,
+		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 1000,
 		},
@@ -263,7 +263,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "height and width constrained (w>h) taller than wide",
 		SizeSpec: height_and_width_constrained_wh,
-		Rect: taller_than_wide,
+		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 250,
 		},
@@ -271,7 +271,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "height and width constrained (w>h) wider than tall",
 		SizeSpec: height_and_width_constrained_wh,
-		Rect: wider_than_tall,
+		Rect: landscape,
 		ExpectedWidth: 1000,
 		ExpectedHeight: 500,
 		},
@@ -287,7 +287,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "height and width constrained (h>w) taller than wide",
 		SizeSpec: height_and_width_constrained_hw,
-		Rect: taller_than_wide,
+		Rect: portrait,
 		ExpectedWidth: 500,
 		ExpectedHeight: 1000,
 		},
@@ -295,7 +295,7 @@ func Test_ToRect(t *testing.T) {
 		{
 		Label: "height and width constrained (h>w) wider than tall",
 		SizeSpec: height_and_width_constrained_hw,
-		Rect: wider_than_tall,
+		Rect: landscape,
 		ExpectedWidth: 500,
 		ExpectedHeight: 1000,
 		},
