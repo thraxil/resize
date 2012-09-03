@@ -4,6 +4,7 @@
 package resize
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"regexp"
@@ -83,6 +84,19 @@ func (self sizeSpec) IsPortrait() bool {
 
 func (self sizeSpec) IsLandscape() bool {
 	return self.width > self.height
+}
+
+func (self sizeSpec) ToImageMagickSpec() string {
+	if self.IsSquare() {
+		return fmt.Sprintf("%dx%d^", self.width, self.width)
+	}
+	if self.width == -1 {
+		return fmt.Sprintf("x%d", self.height)
+	}
+	if self.height == -1 {
+		return fmt.Sprintf("%d", self.width)
+	}
+	return fmt.Sprintf("%dx%d", self.width, self.height)
 }
 
 func (self sizeSpec) IsFull() bool {
