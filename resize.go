@@ -99,6 +99,22 @@ func (self sizeSpec) ToImageMagickSpec() string {
 	return fmt.Sprintf("%dx%d", self.width, self.height)
 }
 
+func (self sizeSpec) String() string {
+	if self.IsFull() {
+		return "full"
+	}
+	if self.IsSquare() {
+		return fmt.Sprintf("%ds", self.width)
+	}
+	if self.width == -1 {
+		return fmt.Sprintf("%dh", self.height)
+	}
+	if self.height == -1 {
+		return fmt.Sprintf("%dw", self.width)
+	}
+	return fmt.Sprintf("%dw%dh", self.width, self.height)
+}
+
 func (self sizeSpec) IsFull() bool {
 	return self.full
 }
