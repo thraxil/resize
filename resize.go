@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-type sizeSpec struct {
+type SizeSpec struct {
 	width  int
 	height int
 	square bool
@@ -34,8 +34,8 @@ type sizeSpec struct {
 // 
 // see Test_MakeSizeSpec in resize_test.go for more examples
 
-func MakeSizeSpec(str string) *sizeSpec {
-	s := sizeSpec{}
+func MakeSizeSpec(str string) *SizeSpec {
+	s := SizeSpec{}
 	if str == "full" {
 		s.full = true
 		s.width = -1
@@ -74,19 +74,19 @@ func MakeSizeSpec(str string) *sizeSpec {
 	return &s
 }
 
-func (self sizeSpec) IsSquare() bool {
+func (self SizeSpec) IsSquare() bool {
 	return self.square
 }
 
-func (self sizeSpec) IsPortrait() bool {
+func (self SizeSpec) IsPortrait() bool {
 	return self.height > self.width
 }
 
-func (self sizeSpec) IsLandscape() bool {
+func (self SizeSpec) IsLandscape() bool {
 	return self.width > self.height
 }
 
-func (self sizeSpec) ToImageMagickSpec() string {
+func (self SizeSpec) ToImageMagickSpec() string {
 	if self.IsSquare() {
 		return fmt.Sprintf("%dx%d^", self.width, self.width)
 	}
@@ -99,7 +99,7 @@ func (self sizeSpec) ToImageMagickSpec() string {
 	return fmt.Sprintf("%dx%d", self.width, self.height)
 }
 
-func (self sizeSpec) String() string {
+func (self SizeSpec) String() string {
 	if self.IsFull() {
 		return "full"
 	}
@@ -115,26 +115,26 @@ func (self sizeSpec) String() string {
 	return fmt.Sprintf("%dw%dh", self.width, self.height)
 }
 
-func (self sizeSpec) IsFull() bool {
+func (self SizeSpec) IsFull() bool {
 	return self.full
 }
 
-func (self sizeSpec) Width() int {
+func (self SizeSpec) Width() int {
 	return self.width
 }
 
-func (self sizeSpec) Height() int {
+func (self SizeSpec) Height() int {
 	return self.height
 }
 
-func (self sizeSpec) MaxDimension() int {
+func (self SizeSpec) MaxDimension() int {
 	if self.width > self.height {
 		return self.width
 	}
 	return self.height
 }
 
-func (self sizeSpec) MinDimension() int {
+func (self SizeSpec) MinDimension() int {
 	if self.width < self.height {
 		return self.width
 	}
@@ -168,10 +168,10 @@ func rectIsSquare(r image.Rectangle) bool {
 }
 
 // given an image size (as image.Rect), we match it up
-// to the sizeSpec and return a new image.Rect which is 
+// to the SizeSpec and return a new image.Rect which is 
 // essentially, the dimensions to crop the image to before scaling
 
-func (self *sizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
+func (self *SizeSpec) ToRect(rect image.Rectangle) image.Rectangle {
 	if self.full || self.Width() == -1 || self.Height() == -1 {
 		// full-size or only scaling one dimension, means we deal with the whole thing
 		return rect
@@ -273,8 +273,8 @@ func max(a, b int) int {
 }
 
 // size of the image that will result from resizing one of the
-// specified rect to this sizeSpec
-func (self *sizeSpec) TargetWH(rect image.Rectangle) (int, int) {
+// specified rect to this SizeSpec
+func (self *SizeSpec) TargetWH(rect image.Rectangle) (int, int) {
 	if self.full {
 		return rect.Dx(), rect.Dy()
 	}

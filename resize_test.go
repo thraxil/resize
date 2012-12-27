@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-type sizeSpecTestCase struct {
+type SizeSpecTestCase struct {
 	SizeSpecString string
 	Full           bool
 	Square         bool
@@ -14,7 +14,7 @@ type sizeSpecTestCase struct {
 }
 
 func Test_MakeSizeSpec(t *testing.T) {
-	cases := []sizeSpecTestCase{
+	cases := []SizeSpecTestCase{
 		{
 			SizeSpecString: "100s",
 			Full:           false,
@@ -108,7 +108,7 @@ func Test_MakeSizeSpec(t *testing.T) {
 
 type toRectTestCase struct {
 	Label          string
-	SizeSpec       *sizeSpec
+	SizeSpec       *SizeSpec
 	Rect           image.Rectangle
 	ExpectedWidth  int
 	ExpectedHeight int
