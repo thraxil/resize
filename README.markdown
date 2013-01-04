@@ -75,3 +75,5 @@ Quick Usage Example
       defer fl.Close() 
     	jpeg.Encode(fl, outputImage, nil)
     }
+
+[![Build Status](https://travis-ci.org/thraxil/resize.png)](https://travis-ci.org/thraxil/resize)
