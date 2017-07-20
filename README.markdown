@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/thraxil/resize.svg?branch=master)](https://travis-ci.org/thraxil/resize)
+
 resize.go
 =========
 
