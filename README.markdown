@@ -3,9 +3,9 @@
 resize.go
 =========
 
-This started out as a fork of the image resizing library for Go that used to be in Gorilla
-(at
-http://code.google.com/p/gorilla/source/browse/lib/appengine/example/moustachio/resize/resize.go?r=3dbce6e267e9d497dffbce31220a059f02c4e99d)
+This started out as a fork of the image resizing library for Go that
+used to be in Gorilla (I can't even find a link to the original code,
+it's that old).
 
 but seems to have been taken out.
 
