@@ -51,11 +51,10 @@ Quick Usage Example
         "github.com/thraxil/resize"
     )
     
-    
     func main() {
         file, err := os.Open("test.jpg")
         if err != nil {
-        log.Fatal(err)
+            log.Fatal(err)
         }
         defer file.Close()
         
@@ -63,19 +62,18 @@ Quick Usage Example
         m, err := jpeg.Decode(file)
         if err != nil {
             fmt.Printf("error decoding image\n")
-        log.Fatal(err)
+            log.Fatal(err)
         }
         bounds := m.Bounds()
         outputImage := resize.Resize(m,bounds,100,100)
         outBounds := outputImage.Bounds()
         fmt.Printf("%q\n",outBounds)
-      fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR,0644)
-      if err != nil {
-        fmt.Println("couldn't write", err)
-        return
-      }
-      defer fl.Close()
+        fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR,0644)
+        if err != nil {
+            fmt.Println("couldn't write", err)
+            return
+        }
+        defer fl.Close()
         jpeg.Encode(fl, outputImage, nil)
     }
 
-[![Build Status](https://travis-ci.org/thraxil/resize.png)](https://travis-ci.org/thraxil/resize)
