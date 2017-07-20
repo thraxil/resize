@@ -44,38 +44,38 @@ Quick Usage Example
 
     package main
     import (
-    	"os"
-    	"fmt"
-    	"image/jpeg"
-    	"log"
-    	"github.com/thraxil/resize"
+        "os"
+        "fmt"
+        "image/jpeg"
+        "log"
+        "github.com/thraxil/resize"
     )
     
     
     func main() {
-    	file, err := os.Open("test.jpg")
-    	if err != nil {
+        file, err := os.Open("test.jpg")
+        if err != nil {
         log.Fatal(err)
-    	}
-    	defer file.Close()
-    	
-    	// Decode the image.
-    	m, err := jpeg.Decode(file)
-    	if err != nil {
-    		fmt.Printf("error decoding image\n")
+        }
+        defer file.Close()
+        
+        // Decode the image.
+        m, err := jpeg.Decode(file)
+        if err != nil {
+            fmt.Printf("error decoding image\n")
         log.Fatal(err)
-    	}
-    	bounds := m.Bounds()
-    	outputImage := resize.Resize(m,bounds,100,100)
-    	outBounds := outputImage.Bounds()
-    	fmt.Printf("%q\n",outBounds)
-      fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR,0644) 
-      if err != nil { 
-        fmt.Println("couldn't write", err) 
-        return 
-      } 
-      defer fl.Close() 
-    	jpeg.Encode(fl, outputImage, nil)
+        }
+        bounds := m.Bounds()
+        outputImage := resize.Resize(m,bounds,100,100)
+        outBounds := outputImage.Bounds()
+        fmt.Printf("%q\n",outBounds)
+      fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR,0644)
+      if err != nil {
+        fmt.Println("couldn't write", err)
+        return
+      }
+      defer fl.Close()
+        jpeg.Encode(fl, outputImage, nil)
     }
 
 [![Build Status](https://travis-ci.org/thraxil/resize.png)](https://travis-ci.org/thraxil/resize)
