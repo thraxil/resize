@@ -5,9 +5,7 @@ resize.go
 
 This started out as a fork of the image resizing library for Go that
 used to be in Gorilla (I can't even find a link to the original code,
-it's that old).
-
-but seems to have been taken out.
+it's that old) but seems to have been taken out.
 
 It has since pretty much entirely been gutted and replaced.
 
