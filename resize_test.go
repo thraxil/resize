@@ -108,6 +108,10 @@ func Test_MakeSizeSpec(t *testing.T) {
 		if ss.Height() != c.ExpectedHeight {
 			t.Error(c.SizeSpecString, "-- bad height", ss.Height(), "expected", c.ExpectedHeight)
 		}
+
+		if ss.String() != c.SizeSpecString && c.SizeSpecString != "100h200w" && c.SizeSpecString != "200h100w" {
+			t.Error(c.SizeSpecString, "-- bad round trip on String()", ss.String())
+		}
 	}
 
 }
