@@ -69,9 +69,8 @@ Quick Usage Example
         if err != nil {
             fmt.Printf("error decoding image\n")
             log.Fatal(err)
-        }
-        bounds := m.Bounds()
-        outputImage := resize.Resize(m,bounds,100,100)
+		}
+		outputImage := resize.Resize(m, "100s")
         outBounds := outputImage.Bounds()
         fmt.Printf("%q\n",outBounds)
         fl, err := os.OpenFile("out.jpg", os.O_CREATE|os.O_RDWR,0644)
