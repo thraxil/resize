@@ -90,6 +90,12 @@ func Test_MakeSizeSpec(t *testing.T) {
 			if !ss.IsSquare() {
 				t.Error(c.SizeSpecString, "-- should be square but is not")
 			}
+			if ss.IsPortrait() {
+				t.Error(c.SizeSpecString, "-- should not be portrait")
+			}
+			if ss.IsLandscape() {
+				t.Error(c.SizeSpecString, "-- should not be landscape")
+			}
 		} else {
 			if ss.IsSquare() {
 				t.Error(c.SizeSpecString, "-- should not be square but is")
