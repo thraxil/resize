@@ -1,3 +1,11 @@
 language: go
+go: 1.7
+
+before_install:
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+
 install: go build .
-script: go test .
+
+script:
+  - goveralls -service=travis-ci -package .
