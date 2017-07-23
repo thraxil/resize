@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/thraxil/resize.svg?branch=master)](https://travis-ci.org/thraxil/resize)
+[![Coverage Status](https://coveralls.io/repos/github/thraxil/resize/badge.svg?branch=master)](https://coveralls.io/github/thraxil/resize?branch=master)
 
 resize.go
 =========
